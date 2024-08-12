@@ -4,7 +4,9 @@
 
 #define TAMANHO_STRING 100
 #define TAMANHO_TELEFONE 20
+#define MAX_TRABALHADORES 100
 #define MAX_INCIDENTES 100
+#define MAX_TRABALHADORES_ENVOLVIDOS 10
 
 typedef struct {
     int id_empresa;
@@ -45,22 +47,21 @@ typedef struct {
     int id_incidente;
     char descricao_incidente[TAMANHO_STRING];
     char data_incidente[TAMANHO_STRING];
-    int id_trabalhador;
+    int trabalhadores_envolvidos[MAX_TRABALHADORES_ENVOLVIDOS];
+    int quantidade_envolvidos;
 } DadosIncidente;
 
-void inserir_empresa(DadosEmpresa empresas[], int *contagem_empresas, const char *nome, const char *cnpj, const char *tipo, const char *equipamentos, const char *epicos) {
-    DadosEmpresa nova_empresa;
-    nova_empresa.id_empresa = *contagem_empresas + 1;
-    strncpy(nova_empresa.nome_empresa, nome, TAMANHO_STRING);
-    strncpy(nova_empresa.cnpj_empresa, cnpj, TAMANHO_STRING);
-    strncpy(nova_empresa.tipo_empresa, tipo, TAMANHO_STRING);
-    strncpy(nova_empresa.equipamentos_empresa, equipamentos, TAMANHO_STRING);
-    strncpy(nova_empresa.epicos_empresa, epicos, TAMANHO_STRING);
+// Prot√≥tipos das fun√ß√µes
+void inserir_empresa(DadosEmpresa empresas[], int *contagem_empresas, const char *nome, const char *cnpj, const char *tipo, const char *equipamentos, const char *epicos);
+void inserir_trabalhador(DadosTrabalhador trabalhadores[], int *contagem_trabalhadores, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefone_emergencial, const char *formacao, const char *cargo, const char *ala, const char *cpf, int horas_trabalho);
+void atualizar_trabalhador(DadosTrabalhador trabalhadores[], int contagem_trabalhadores, int id_trabalhador, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefone_emergencial, const char *formacao, const char *cargo, const char *ala, const char *cpf, int horas_trabalho);
+void inserir_tecnico(DadosTecnico tecnicos[], int *contagem_tecnicos, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefone_emergencial, const char *formacao, int anos_experiencia, const char *ala_responsabilidade);
+void inserir_incidente(DadosIncidente incidentes[], int *contagem_incidentes, const char *descricao, const char *data, int trabalhadores[], int quantidade_envolvidos);
+void adicionar_incidente(DadosIncidente incidentes[], int *contagem_incidentes, DadosTrabalhador trabalhadores[], int contagem_trabalhadores);
+void listar_trabalhadores(DadosTrabalhador trabalhadores[], int contagem_trabalhadores);
+void mostrar_dados_trabalhador(DadosTrabalhador trabalhadores[], int contagem_trabalhadores, int id_trabalhador);
 
-    empresas[*contagem_empresas] = nova_empresa;
-    (*contagem_empresas)++;
-}
-
+// Implementa√ß√£o das fun√ß√µes
 void inserir_trabalhador(DadosTrabalhador trabalhadores[], int *contagem_trabalhadores, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefone_emergencial, const char *formacao, const char *cargo, const char *ala, const char *cpf, int horas_trabalho) {
     DadosTrabalhador novo_trabalhador;
     novo_trabalhador.id_trabalhador = *contagem_trabalhadores + 1;
@@ -96,7 +97,7 @@ void atualizar_trabalhador(DadosTrabalhador trabalhadores[], int contagem_trabal
             return;
         }
     }
-    printf("Trabalhador com ID %d n„o encontrado.\n", id_trabalhador);
+    printf("Trabalhador com ID %d n√£o encontrado.\n", id_trabalhador);
 }
 
 void inserir_tecnico(DadosTecnico tecnicos[], int *contagem_tecnicos, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefone_emergencial, const char *formacao, int anos_experiencia, const char *ala_responsabilidade) {
@@ -115,69 +116,107 @@ void inserir_tecnico(DadosTecnico tecnicos[], int *contagem_tecnicos, const char
     (*contagem_tecnicos)++;
 }
 
-void inserir_incidente(DadosIncidente incidentes[], int *contagem_incidentes, const char *descricao, const char *data, int id_trabalhador) {
+void inserir_incidente(DadosIncidente incidentes[], int *contagem_incidentes, const char *descricao, const char *data, int trabalhadores[], int quantidade_envolvidos) {
     DadosIncidente novo_incidente;
     novo_incidente.id_incidente = *contagem_incidentes + 1;
     strncpy(novo_incidente.descricao_incidente, descricao, TAMANHO_STRING);
     strncpy(novo_incidente.data_incidente, data, TAMANHO_STRING);
-    novo_incidente.id_trabalhador = id_trabalhador;
+    novo_incidente.quantidade_envolvidos = quantidade_envolvidos;
+    for (int i = 0; i < quantidade_envolvidos; i++) {
+        novo_incidente.trabalhadores_envolvidos[i] = trabalhadores[i];
+    }
 
     incidentes[*contagem_incidentes] = novo_incidente;
     (*contagem_incidentes)++;
 }
 
+void adicionar_incidente(DadosIncidente incidentes[], int *contagem_incidentes, DadosTrabalhador trabalhadores[], int contagem_trabalhadores) {
+    DadosIncidente novo_incidente;
+    char descricao[TAMANHO_STRING];
+    char data[TAMANHO_STRING];
+    int trabalhadores_envolvidos[MAX_TRABALHADORES_ENVOLVIDOS];
+    int quantidade_envolvidos;
+
+    printf("Descri√ß√£o do incidente: ");
+    fgets(descricao, TAMANHO_STRING, stdin);
+    descricao[strcspn(descricao, "\n")] = '\0'; // Remove newline
+
+    printf("Data do incidente (DD/MM/AAAA): ");
+    fgets(data, TAMANHO_STRING, stdin);
+    data[strcspn(data, "\n")] = '\0'; // Remove newline
+
+    printf("Quantidade de trabalhadores envolvidos: ");
+    scanf("%d", &quantidade_envolvidos);
+    getchar(); // Limpa o buffer
+
+    if (quantidade_envolvidos > MAX_TRABALHADORES_ENVOLVIDOS) {
+        printf("N√∫mero de trabalhadores envolvidos excede o limite permitido.\n");
+        return;
+    }
+
+    printf("IDs dos trabalhadores envolvidos (separados por espa√ßo): ");
+    for (int i = 0; i < quantidade_envolvidos; i++) {
+        scanf("%d", &trabalhadores_envolvidos[i]);
+    }
+    getchar(); // Limpa o buffer
+
+    inserir_incidente(incidentes, contagem_incidentes, descricao, data, trabalhadores_envolvidos, quantidade_envolvidos);
+}
+
 void listar_trabalhadores(DadosTrabalhador trabalhadores[], int contagem_trabalhadores) {
-    printf("Lista de Trabalhadores:\n");
-    if (contagem_trabalhadores == 0) {
-        printf("Nenhum trabalhador cadastrado.\n");
-    } else {
-        for (int i = 0; i < contagem_trabalhadores; i++) {
-            printf("ID: %d, Nome: %s, MatrÌcula: %s, CPF: %s\n", 
-                   trabalhadores[i].id_trabalhador, 
-                   trabalhadores[i].nome_trabalhador, 
-                   trabalhadores[i].matricula_trabalhador, 
-                   trabalhadores[i].cpf_trabalhador);
-        }
+    for (int i = 0; i < contagem_trabalhadores; i++) {
+        printf("ID: %d\n", trabalhadores[i].id_trabalhador);
+        printf("Matr√≠cula: %s\n", trabalhadores[i].matricula_trabalhador);
+        printf("Nome: %s\n", trabalhadores[i].nome_trabalhador);
+        printf("Endere√ßo: %s\n", trabalhadores[i].endereco_trabalhador);
+        printf("Telefone: %s\n", trabalhadores[i].telefone_trabalhador);
+        printf("Telefone Emergencial: %s\n", trabalhadores[i].telefone_emergencial_trabalhador);
+        printf("Forma√ß√£o: %s\n", trabalhadores[i].formacao_trabalhador);
+        printf("Cargo: %s\n", trabalhadores[i].cargo_trabalhador);
+        printf("Ala: %s\n", trabalhadores[i].ala_trabalhador);
+        printf("CPF: %s\n", trabalhadores[i].cpf_trabalhador);
+        printf("Horas de Trabalho: %d\n", trabalhadores[i].horas_trabalho);
+        printf("-----\n");
     }
 }
 
 void mostrar_dados_trabalhador(DadosTrabalhador trabalhadores[], int contagem_trabalhadores, int id_trabalhador) {
     for (int i = 0; i < contagem_trabalhadores; i++) {
         if (trabalhadores[i].id_trabalhador == id_trabalhador) {
-            printf("Dados do Trabalhador:\n");
-            printf("MatrÌcula: %s\n", trabalhadores[i].matricula_trabalhador);
+            printf("ID: %d\n", trabalhadores[i].id_trabalhador);
+            printf("Matr√≠cula: %s\n", trabalhadores[i].matricula_trabalhador);
             printf("Nome: %s\n", trabalhadores[i].nome_trabalhador);
-            printf("EndereÁo: %s\n", trabalhadores[i].endereco_trabalhador);
+            printf("Endere√ßo: %s\n", trabalhadores[i].endereco_trabalhador);
             printf("Telefone: %s\n", trabalhadores[i].telefone_trabalhador);
             printf("Telefone Emergencial: %s\n", trabalhadores[i].telefone_emergencial_trabalhador);
-            printf("FormaÁ„o: %s\n", trabalhadores[i].formacao_trabalhador);
+            printf("Forma√ß√£o: %s\n", trabalhadores[i].formacao_trabalhador);
             printf("Cargo: %s\n", trabalhadores[i].cargo_trabalhador);
             printf("Ala: %s\n", trabalhadores[i].ala_trabalhador);
             printf("CPF: %s\n", trabalhadores[i].cpf_trabalhador);
             printf("Horas de Trabalho: %d\n", trabalhadores[i].horas_trabalho);
+            printf("-----\n");
             return;
         }
     }
-    printf("Trabalhador com ID %d n„o encontrado.\n", id_trabalhador);
+    printf("Trabalhador com ID %d n√£o encontrado.\n", id_trabalhador);
 }
 
 int main() {
-    DadosTrabalhador trabalhadores[MAX_INCIDENTES];
+    DadosEmpresa empresas[MAX_TRABALHADORES];
+    DadosTrabalhador trabalhadores[MAX_TRABALHADORES];
+    DadosTecnico tecnicos[MAX_TRABALHADORES];
+    DadosIncidente incidentes[MAX_INCIDENTES];
+
+    int contagem_empresas = 0;
     int contagem_trabalhadores = 0;
+    int contagem_tecnicos = 0;
+    int contagem_incidentes = 0;
 
-    // Exemplo de inserÁ„o de trabalhadores
-    inserir_trabalhador(trabalhadores, &contagem_trabalhadores, "123", "Jo„o Silva", "Rua A, 123", "1234567890", "0987654321", "Engenheiro", "Analista", "Ala 1", "12345678901", 40);
-    inserir_trabalhador(trabalhadores, &contagem_trabalhadores, "124", "Maria Oliveira", "Rua B, 456", "2345678901", "1098765432", "TÈcnico", "Desenvolvedor", "Ala 2", "23456789012", 35);
-
-    // Listar trabalhadores
+    // Exemplo de uso das fun√ß√µes
+    inserir_trabalhador(trabalhadores, &contagem_trabalhadores, "123", "Jo√£o Silva", "Rua A, 123", "1234567890", "0987654321", "Engenheiro", "Analista", "Ala 1", "12345678901", 40);
     listar_trabalhadores(trabalhadores, contagem_trabalhadores);
 
-    // Atualizar trabalhador
-    atualizar_trabalhador(trabalhadores, contagem_trabalhadores, 1, "123", "Jo„o Silva", "Rua A, 123", "1234567890", "0987654321", "Engenheiro", "Analista Senior", "Ala 1", "12345678901", 45);
-
-    // Mostrar dados de um trabalhador especÌfico
-    mostrar_dados_trabalhador(trabalhadores, contagem_trabalhadores, 1);
+    adicionar_incidente(incidentes, &contagem_incidentes, trabalhadores, contagem_trabalhadores);
 
     return 0;
 }
-
