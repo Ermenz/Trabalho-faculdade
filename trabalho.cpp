@@ -3,93 +3,93 @@
 
 #define tamanhoVariavel 100
 #define tamanhoTelefone 20
-#define maxTrabalhadores 100
+#define maxColaboradores 100
 #define maxIncidentes 100
-#define maxTrabalhadoresEnvolvidos 10
+#define maxColaboradoresEnvolvidos 10
 
 typedef struct {
-    int idTrabalhador;
-    char matriculaTrabalhador[tamanhoVariavel];
-    char nomeTrabalhador[tamanhoVariavel];
-    char enderecoTrabalhador[tamanhoVariavel];
-    char telefoneTrabalhador[tamanhoTelefone];
-    char telefoneEmergencialTrabalhador[tamanhoTelefone];
-    char formacaoTrabalhador[tamanhoVariavel];
-    char cargoTrabalhador[tamanhoVariavel];
-    char alaTrabalhador[tamanhoVariavel];
-    char cpfTrabalhador[tamanhoVariavel];
+    int idColaborador;
+    char matriculaColaborador[tamanhoVariavel];
+    char nomeColaborador[tamanhoVariavel];
+    char enderecoColaborador[tamanhoVariavel];
+    char telefoneColaborador[tamanhoTelefone];
+    char telefoneEmergencialColaborador[tamanhoTelefone];
+    char formacaoColaborador[tamanhoVariavel];
+    char cargoColaborador[tamanhoVariavel];
+    char alaColaborador[tamanhoVariavel];
+    char cpfColaborador[tamanhoVariavel];
     int horasTrabalho;
-} DadosTrabalhador;
+} DadosColaborador;
 
 typedef struct {
     int idIncidente;
     char descricaoIncidente[tamanhoVariavel];
     char dataIncidente[tamanhoVariavel];
-    int trabalhadoresEnvolvidos[maxTrabalhadoresEnvolvidos];
+    int colaboradoresEnvolvidos[maxColaboradoresEnvolvidos];
     int quantidadeEnvolvidos;
 } DadosIncidente;
 
-void inserirTrabalhador(DadosTrabalhador trabalhadores[], int *contagemTrabalhadores, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefoneEmergencial, const char *formacao, const char *cargo, const char *ala, const char *cpf, int horasTrabalho);
-void listarTrabalhadores(const DadosTrabalhador trabalhadores[], int contagemTrabalhadores);
-void inserirIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const char *descricao, const char *data, const int trabalhadores[], int quantidadeEnvolvidos);
-void adicionarIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const DadosTrabalhador trabalhadores[], int contagemTrabalhadores);
+void inserirColaborador(DadosColaborador colaboradores[], int *contagemColaboradores, int id, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefoneEmergencial, const char *formacao, const char *cargo, const char *ala, const char *cpf, int horasTrabalho);
+void listarColaboradores(const DadosColaborador colaboradores[], int contagemColaboradores);
+void inserirIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const char *descricao, const char *data, const int colaboradores[], int quantidadeEnvolvidos);
+void adicionarIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const DadosColaborador colaboradores[], int contagemColaboradores);
 void listarIncidentes(const DadosIncidente incidentes[], int contagemIncidentes);
 
-void inserirTrabalhador(DadosTrabalhador trabalhadores[], int *contagemTrabalhadores, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefoneEmergencial, const char *formacao, const char *cargo, const char *ala, const char *cpf, int horasTrabalho) {
-    if (*contagemTrabalhadores >= maxTrabalhadores) {
-        printf("Número máximo de trabalhadores atingido.\n");
+void inserirColaborador(DadosColaborador colaboradores[], int *contagemColaboradores, int id, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefoneEmergencial, const char *formacao, const char *cargo, const char *ala, const char *cpf, int horasTrabalho) {
+    if (*contagemColaboradores >= maxColaboradores) {
+        printf("Número máximo de colaboradores atingido.\n");
         return;
     }
 
-    DadosTrabalhador novoTrabalhador;
-    novoTrabalhador.idTrabalhador = *contagemTrabalhadores + 1;
-    strncpy(novoTrabalhador.matriculaTrabalhador, matricula, tamanhoVariavel - 1);
-    novoTrabalhador.matriculaTrabalhador[tamanhoVariavel - 1] = '\0';
-    strncpy(novoTrabalhador.nomeTrabalhador, nome, tamanhoVariavel - 1);
-    novoTrabalhador.nomeTrabalhador[tamanhoVariavel - 1] = '\0';
-    strncpy(novoTrabalhador.enderecoTrabalhador, endereco, tamanhoVariavel - 1);
-    novoTrabalhador.enderecoTrabalhador[tamanhoVariavel - 1] = '\0';
-    strncpy(novoTrabalhador.telefoneTrabalhador, telefone, tamanhoTelefone - 1);
-    novoTrabalhador.telefoneTrabalhador[tamanhoTelefone - 1] = '\0';
-    strncpy(novoTrabalhador.telefoneEmergencialTrabalhador, telefoneEmergencial, tamanhoTelefone - 1);
-    novoTrabalhador.telefoneEmergencialTrabalhador[tamanhoTelefone - 1] = '\0';
-    strncpy(novoTrabalhador.formacaoTrabalhador, formacao, tamanhoVariavel - 1);
-    novoTrabalhador.formacaoTrabalhador[tamanhoVariavel - 1] = '\0';
-    strncpy(novoTrabalhador.cargoTrabalhador, cargo, tamanhoVariavel - 1);
-    novoTrabalhador.cargoTrabalhador[tamanhoVariavel - 1] = '\0';
-    strncpy(novoTrabalhador.alaTrabalhador, ala, tamanhoVariavel - 1);
-    novoTrabalhador.alaTrabalhador[tamanhoVariavel - 1] = '\0';
-    strncpy(novoTrabalhador.cpfTrabalhador, cpf, tamanhoVariavel - 1);
-    novoTrabalhador.cpfTrabalhador[tamanhoVariavel - 1] = '\0';
-    novoTrabalhador.horasTrabalho = horasTrabalho;
+    DadosColaborador novoColaborador;
+    novoColaborador.idColaborador = id;
+    strncpy(novoColaborador.matriculaColaborador, matricula, tamanhoVariavel - 1);
+    novoColaborador.matriculaColaborador[tamanhoVariavel - 1] = '\0';
+    strncpy(novoColaborador.nomeColaborador, nome, tamanhoVariavel - 1);
+    novoColaborador.nomeColaborador[tamanhoVariavel - 1] = '\0';
+    strncpy(novoColaborador.enderecoColaborador, endereco, tamanhoVariavel - 1);
+    novoColaborador.enderecoColaborador[tamanhoVariavel - 1] = '\0';
+    strncpy(novoColaborador.telefoneColaborador, telefone, tamanhoTelefone - 1);
+    novoColaborador.telefoneColaborador[tamanhoTelefone - 1] = '\0';
+    strncpy(novoColaborador.telefoneEmergencialColaborador, telefoneEmergencial, tamanhoTelefone - 1);
+    novoColaborador.telefoneEmergencialColaborador[tamanhoTelefone - 1] = '\0';
+    strncpy(novoColaborador.formacaoColaborador, formacao, tamanhoVariavel - 1);
+    novoColaborador.formacaoColaborador[tamanhoVariavel - 1] = '\0';
+    strncpy(novoColaborador.cargoColaborador, cargo, tamanhoVariavel - 1);
+    novoColaborador.cargoColaborador[tamanhoVariavel - 1] = '\0';
+    strncpy(novoColaborador.alaColaborador, ala, tamanhoVariavel - 1);
+    novoColaborador.alaColaborador[tamanhoVariavel - 1] = '\0';
+    strncpy(novoColaborador.cpfColaborador, cpf, tamanhoVariavel - 1);
+    novoColaborador.cpfColaborador[tamanhoVariavel - 1] = '\0';
+    novoColaborador.horasTrabalho = horasTrabalho;
 
-    trabalhadores[*contagemTrabalhadores] = novoTrabalhador;
-    (*contagemTrabalhadores)++;
+    colaboradores[*contagemColaboradores] = novoColaborador;
+    (*contagemColaboradores)++;
 }
 
-void listarTrabalhadores(const DadosTrabalhador trabalhadores[], int contagemTrabalhadores) {
-    if (contagemTrabalhadores == 0) {
-        printf("Nenhum trabalhador cadastrado.\n");
+void listarColaboradores(const DadosColaborador colaboradores[], int contagemColaboradores) {
+    if (contagemColaboradores == 0) {
+        printf("Nenhum colaborador cadastrado.\n");
         return;
     }
 
-    for (int i = 0; i < contagemTrabalhadores; i++) {
-        printf("ID: %d\n", trabalhadores[i].idTrabalhador);
-        printf("Matrícula: %s\n", trabalhadores[i].matriculaTrabalhador);
-        printf("Nome: %s\n", trabalhadores[i].nomeTrabalhador);
-        printf("Endereço: %s\n", trabalhadores[i].enderecoTrabalhador);
-        printf("Telefone: %s\n", trabalhadores[i].telefoneTrabalhador);
-        printf("Telefone Emergencial: %s\n", trabalhadores[i].telefoneEmergencialTrabalhador);
-        printf("Formação: %s\n", trabalhadores[i].formacaoTrabalhador);
-        printf("Cargo: %s\n", trabalhadores[i].cargoTrabalhador);
-        printf("Ala: %s\n", trabalhadores[i].alaTrabalhador);
-        printf("CPF: %s\n", trabalhadores[i].cpfTrabalhador);
-        printf("Horas de Trabalho: %d\n", trabalhadores[i].horasTrabalho);
+    for (int i = 0; i < contagemColaboradores; i++) {
+        printf("ID: %d\n", colaboradores[i].idColaborador);
+        printf("Matrícula: %s\n", colaboradores[i].matriculaColaborador);
+        printf("Nome: %s\n", colaboradores[i].nomeColaborador);
+        printf("Endereço: %s\n", colaboradores[i].enderecoColaborador);
+        printf("Telefone: %s\n", colaboradores[i].telefoneColaborador);
+        printf("Telefone Emergencial: %s\n", colaboradores[i].telefoneEmergencialColaborador);
+        printf("Formação: %s\n", colaboradores[i].formacaoColaborador);
+        printf("Cargo: %s\n", colaboradores[i].cargoColaborador);
+        printf("Ala: %s\n", colaboradores[i].alaColaborador);
+        printf("CPF: %s\n", colaboradores[i].cpfColaborador);
+        printf("Horas de Trabalho: %d\n", colaboradores[i].horasTrabalho);
         printf("-----\n");
     }
 }
 
-void inserirIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const char *descricao, const char *data, const int trabalhadores[], int quantidadeEnvolvidos) {
+void inserirIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const char *descricao, const char *data, const int colaboradores[], int quantidadeEnvolvidos) {
     if (*contagemIncidentes >= maxIncidentes) {
         printf("Número máximo de incidentes atingido.\n");
         return;
@@ -105,7 +105,7 @@ void inserirIncidente(DadosIncidente incidentes[], int *contagemIncidentes, cons
     novoIncidente.dataIncidente[tamanhoVariavel - 1] = '\0';
 
     for (int i = 0; i < quantidadeEnvolvidos; i++) {
-        novoIncidente.trabalhadoresEnvolvidos[i] = trabalhadores[i];
+        novoIncidente.colaboradoresEnvolvidos[i] = colaboradores[i];
     }
     novoIncidente.quantidadeEnvolvidos = quantidadeEnvolvidos;
 
@@ -113,10 +113,10 @@ void inserirIncidente(DadosIncidente incidentes[], int *contagemIncidentes, cons
     (*contagemIncidentes)++;
 }
 
-void adicionarIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const DadosTrabalhador trabalhadores[], int contagemTrabalhadores) {
+void adicionarIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const DadosColaborador colaboradores[], int contagemColaboradores) {
     char descricao[tamanhoVariavel];
     char data[tamanhoVariavel];
-    int trabalhadoresEnvolvidos[maxTrabalhadoresEnvolvidos];
+    int colaboradoresEnvolvidos[maxColaboradoresEnvolvidos];
     int quantidadeEnvolvidos;
 
     printf("Descrição do incidente: ");
@@ -127,22 +127,22 @@ void adicionarIncidente(DadosIncidente incidentes[], int *contagemIncidentes, co
     fgets(data, tamanhoVariavel, stdin);
     data[strcspn(data, "\n")] = '\0';
 
-    printf("Quantidade de trabalhadores envolvidos: ");
+    printf("Quantidade de colaboradores envolvidos: ");
     scanf("%d", &quantidadeEnvolvidos);
     getchar();
 
-    if (quantidadeEnvolvidos > maxTrabalhadoresEnvolvidos) {
-        printf("Número de trabalhadores envolvidos excede o limite permitido.\n");
+    if (quantidadeEnvolvidos > maxColaboradoresEnvolvidos) {
+        printf("Número de colaboradores envolvidos excede o limite permitido.\n");
         return;
     }
 
-    printf("IDs dos trabalhadores envolvidos (separados por espaço): ");
+    printf("IDs dos colaboradores envolvidos (separados por espaço): ");
     for (int i = 0; i < quantidadeEnvolvidos; i++) {
-        scanf("%d", &trabalhadoresEnvolvidos[i]);
+        scanf("%d", &colaboradoresEnvolvidos[i]);
     }
     getchar();
 
-    inserirIncidente(incidentes, contagemIncidentes, descricao, data, trabalhadoresEnvolvidos, quantidadeEnvolvidos);
+    inserirIncidente(incidentes, contagemIncidentes, descricao, data, colaboradoresEnvolvidos, quantidadeEnvolvidos);
 }
 
 void listarIncidentes(const DadosIncidente incidentes[], int contagemIncidentes) {
@@ -155,25 +155,25 @@ void listarIncidentes(const DadosIncidente incidentes[], int contagemIncidentes)
         printf("ID: %d\n", incidentes[i].idIncidente);
         printf("Descrição: %s\n", incidentes[i].descricaoIncidente);
         printf("Data: %s\n", incidentes[i].dataIncidente);
-        printf("Trabalhadores envolvidos: ");
+        printf("Colaboradores envolvidos: ");
         for (int j = 0; j < incidentes[i].quantidadeEnvolvidos; j++) {
-            printf("%d ", incidentes[i].trabalhadoresEnvolvidos[j]);
+            printf("%d ", incidentes[i].colaboradoresEnvolvidos[j]);
         }
         printf("\n-----\n");
     }
 }
 
 int main() {
-    DadosTrabalhador trabalhadores[maxTrabalhadores];
+    DadosColaborador colaboradores[maxColaboradores];
     DadosIncidente incidentes[maxIncidentes];
-    int contagemTrabalhadores = 0;
+    int contagemColaboradores = 0;
     int contagemIncidentes = 0;
 
     int opcao;
     do {
         printf("Menu:\n");
-        printf("1. Inserir trabalhador\n");
-        printf("2. Listar trabalhadores\n");
+        printf("1. Inserir colaborador\n");
+        printf("2. Listar colaboradores\n");
         printf("3. Adicionar incidente\n");
         printf("4. Mostrar registros de incidentes\n");
         printf("0. Sair\n");
@@ -184,6 +184,7 @@ int main() {
         switch (opcao) {
             case 1:
                 {
+                    int id;
                     char matricula[tamanhoVariavel];
                     char nome[tamanhoVariavel];
                     char endereco[tamanhoVariavel];
@@ -194,6 +195,10 @@ int main() {
                     char ala[tamanhoVariavel];
                     char cpf[tamanhoVariavel];
                     int horasTrabalho;
+
+                    printf("ID do colaborador: ");
+                    scanf("%d", &id);
+                    getchar();
 
                     printf("Matrícula: ");
                     fgets(matricula, tamanhoVariavel, stdin);
@@ -235,14 +240,14 @@ int main() {
                     scanf("%d", &horasTrabalho);
                     getchar();
 
-                    inserirTrabalhador(trabalhadores, &contagemTrabalhadores, matricula, nome, endereco, telefone, telefoneEmergencial, formacao, cargo, ala, cpf, horasTrabalho);
+                    inserirColaborador(colaboradores, &contagemColaboradores, id, matricula, nome, endereco, telefone, telefoneEmergencial, formacao, cargo, ala, cpf, horasTrabalho);
                 }
                 break;
             case 2:
-                listarTrabalhadores(trabalhadores, contagemTrabalhadores);
+                listarColaboradores(colaboradores, contagemColaboradores);
                 break;
             case 3:
-                adicionarIncidente(incidentes, &contagemIncidentes, trabalhadores, contagemTrabalhadores);
+                adicionarIncidente(incidentes, &contagemIncidentes, colaboradores, contagemColaboradores);
                 break;
             case 4:
                 listarIncidentes(incidentes, contagemIncidentes);
