@@ -38,7 +38,7 @@ typedef struct {
 } DadosIncidente;
 
 
-//declaração de voisds
+//declaração de voids
 void inserirColaborador(DadosColaborador colaboradores[], int *contagemColaboradores, int id, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefoneEmergencial, const char *formacao, const char *cargo, const char *ala, const char *cpf, int horasTrabalho);
 void listarColaboradores(const DadosColaborador colaboradores[], int contagemColaboradores);
 void inserirIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const char *descricao, const char *data, const int colaboradores[], int quantidadeEnvolvidos);
