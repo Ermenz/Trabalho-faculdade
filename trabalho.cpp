@@ -1,3 +1,11 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
 #include <stdio.h>
 #include <string.h>
 
@@ -29,13 +37,18 @@ typedef struct {
     int quantidadeEnvolvidos;
 } DadosIncidente;
 
+
+//declaração de voisds
 void inserirColaborador(DadosColaborador colaboradores[], int *contagemColaboradores, int id, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefoneEmergencial, const char *formacao, const char *cargo, const char *ala, const char *cpf, int horasTrabalho);
 void listarColaboradores(const DadosColaborador colaboradores[], int contagemColaboradores);
 void inserirIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const char *descricao, const char *data, const int colaboradores[], int quantidadeEnvolvidos);
 void adicionarIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const DadosColaborador colaboradores[], int contagemColaboradores);
 void listarIncidentes(const DadosIncidente incidentes[], int contagemIncidentes);
 
+
+//Void para inserir os colaboradores
 void inserirColaborador(DadosColaborador colaboradores[], int *contagemColaboradores, int id, const char *matricula, const char *nome, const char *endereco, const char *telefone, const char *telefoneEmergencial, const char *formacao, const char *cargo, const char *ala, const char *cpf, int horasTrabalho) {
+   
     if (*contagemColaboradores >= maxColaboradores) {
         printf("Número máximo de colaboradores atingido.\n");
         return;
@@ -67,6 +80,7 @@ void inserirColaborador(DadosColaborador colaboradores[], int *contagemColaborad
     (*contagemColaboradores)++;
 }
 
+// Void para listar colaboradores
 void listarColaboradores(const DadosColaborador colaboradores[], int contagemColaboradores) {
     if (contagemColaboradores == 0) {
         printf("Nenhum colaborador cadastrado.\n");
@@ -89,6 +103,8 @@ void listarColaboradores(const DadosColaborador colaboradores[], int contagemCol
     }
 }
 
+
+// void para fazr a execução dos dados no void adicionarincidente
 void inserirIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const char *descricao, const char *data, const int colaboradores[], int quantidadeEnvolvidos) {
     if (*contagemIncidentes >= maxIncidentes) {
         printf("Número máximo de incidentes atingido.\n");
@@ -112,6 +128,8 @@ void inserirIncidente(DadosIncidente incidentes[], int *contagemIncidentes, cons
     incidentes[*contagemIncidentes] = novoIncidente;
     (*contagemIncidentes)++;
 }
+
+
 
 void adicionarIncidente(DadosIncidente incidentes[], int *contagemIncidentes, const DadosColaborador colaboradores[], int contagemColaboradores) {
     char descricao[tamanhoVariavel];
@@ -162,6 +180,8 @@ void listarIncidentes(const DadosIncidente incidentes[], int contagemIncidentes)
         printf("\n-----\n");
     }
 }
+
+// Entrada de dados 
 
 int main() {
     DadosColaborador colaboradores[maxColaboradores];
